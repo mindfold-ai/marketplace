@@ -8,6 +8,8 @@ Downloadable templates for Claude Code users.
 marketplace/
 ├── skills/      # Claude Skills (.claude/skills/)
 ├── commands/    # Slash Commands (.claude/commands/)
+│   ├── trellis-plan.md      # Plan: brainstorm → prd/design/implement → validate
+│   └── trellis-execute.md   # Execute: implement → check → update-spec → commit → finish
 ├── agents/      # Sub-agent definitions (.claude/agents/)
 └── specs/       # Spec templates (.trellis/spec/)
 ```
