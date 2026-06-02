@@ -1,5 +1,4 @@
-Work Flow: trellis-implement -> trellis-check -> trellis-update-spec -> commit ->
-    /trellis:finish-work.
+Work Flow: trellis-implement -> trellis-check -> trellis-update-spec -> commit -> /trellis:finish-work.
 未 start 则确认 prd/design/implement 齐全后 start。
 不碰无关脏文件。
 遇到非破坏性、可恢复、符合目标的下一步，按你的推荐继续推进，不等我确认。
