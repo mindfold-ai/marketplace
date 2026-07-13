@@ -9,15 +9,15 @@ Cross-platform conversation memory for Claude Code, Codex CLI, and Pi. The `trel
 
 ## Prerequisite
 
-Trellis CLI **0.6.0-beta.3 or later** installed globally:
+Trellis CLI **0.6.7 or later** installed globally:
 
 ```bash
-npm install -g @mindfoldhq/trellis@beta
-trellis --version   # must be 0.6.0-beta.3 or later
+npm install -g @mindfoldhq/trellis@latest
+trellis --version   # must be 0.6.7 or later
 ```
 
-`trellis mem` ships bundled with the CLI; no extra setup. 0.6.0-beta.3 added
-`--phase brainstorm|implement|all` (see the dedicated section below).
+`trellis mem` ships bundled with the CLI; no extra setup. Version 0.6.7 adds
+project-local Pi `sessionDir` discovery (see the storage table below).
 
 The OpenCode reader is **temporarily unavailable in 0.6.0-beta.4** (returns
 empty + a one-shot stderr warning). Reverted from 0.6.0-beta.3 due to
@@ -204,7 +204,7 @@ OpenCode child sessions show `↳ child of <parent-id>` annotation (currently no
 --turns N                              context: top-N hit turns (default 3)
 --around N                             context: surrounding turns per hit (default 1)
 --max-chars N                          context: char budget (default 6000)
---phase brainstorm|implement|all       extract: slice by [task.py create, start) (default all; Claude & Codex)
+--phase brainstorm|implement|all       extract: slice by [task.py create, start) (default all; Claude, Codex & Pi)
 --include-children                     search / context: merge OpenCode sub-agent sessions into parent
 --json                                 emit JSON
 --help, -h                             show help
@@ -220,7 +220,7 @@ The tool reads these locations directly. No daemon, no index, no upload.
 |---|---|---|
 | **Claude Code** | `~/.claude/projects/<sanitized-cwd>/*.jsonl` | One JSONL per session; cwd path encoded in dirname (`/` and `_` → `-`) |
 | **Codex** | `~/.codex/sessions/YYYY/MM/DD/rollout-*.jsonl` | One JSONL per session; cwd in `session_meta` payload of first event |
-| **Pi** | `~/.pi/agent/sessions/*.jsonl` | One JSONL per session; entries form an `id`/`parentId` tree — only the active branch is extracted (configurable via env var or `settings.json`) |
+| **Pi** | Default `~/.pi/agent/sessions/`; env overrides; global `~/.pi/agent/settings.json`; scoped project `.pi/settings.json` | One JSONL per session; relative `sessionDir` values resolve from the settings file directory. Project-local settings are discovered for the current cwd or `--cwd`, not by an unrestricted `--global` scan. Only the active `id`/`parentId` branch is extracted. |
 | **OpenCode** | Reader temporarily unavailable in 0.6.0-beta.4 | Returns empty + one-shot stderr warning |
 
 ## Cleaning rules (what's stripped from raw data)
