@@ -400,7 +400,7 @@ Curate `implement.jsonl` and `check.jsonl` so the Phase 2 sub-agents get the rig
 - `implement.jsonl` → specs + research the implement sub-agent needs to write code correctly
 - `check.jsonl` → specs for the check sub-agent (quality guidelines, check conventions, same research if needed)
 
-These manifests do not replace `implement.md`. `implement.md` is the human-readable execution plan for a complex task; jsonl files only list context files to inject or load.
+These manifests do not replace `implement.md`. `implement.md` is the human-readable execution plan for a complex task; JSONL files are candidate indexes. Consumers use each entry's reason to select sources and load relevant content on demand, with targeted search or ranged reads for large files.
 
 **How to discover relevant specs**:
 
@@ -481,7 +481,7 @@ Spawn the implement sub-agent:
 - **Dispatch prompt guard**: The prompt MUST start with `Active task: <task path>`, then tell the spawned agent it is already the `trellis-implement` sub-agent and must implement directly, not spawn another `trellis-implement` / `trellis-check`.
 
 The platform hook/plugin auto-handles:
-- Reads `implement.jsonl` and injects referenced spec/research files into the agent prompt
+- Reads `implement.jsonl` into a bounded metadata index containing paths, reasons, types, and available file metadata; referenced source bodies stay on disk for on-demand reads
 - Injects `prd.md`, `design.md` if present, and `implement.md` if present
 - For Codex, `SubagentStart` supplies native context injection; the agent profile keeps child-side loading as the fallback
 
@@ -497,7 +497,7 @@ Spawn the implement sub-agent:
 
 The pull-based sub-agent definition auto-handles the context load requirement:
 - Resolves the active task with `task.py current --source`, then reads `prd.md`, `design.md` if present, and `implement.md` if present
-- Reads `implement.jsonl` and requires the agent to load each referenced spec/research file before coding
+- Reads `implement.jsonl` as a candidate index, uses reasons to select relevant spec/research sources, and prefers targeted search or ranged reads for large files
 
 [/Gemini, Qoder, Copilot, Reasonix, Trae, Grok]
 
@@ -510,7 +510,7 @@ Spawn the implement sub-agent:
 - **Dispatch prompt guard**: Tell the spawned agent it is already the `trellis-implement` sub-agent and must implement directly, not spawn another `trellis-implement` / `trellis-check`.
 
 The platform prelude auto-handles the context load requirement:
-- Reads `implement.jsonl` and injects referenced spec/research files into the agent prompt
+- Reads `implement.jsonl` into a bounded metadata index and leaves referenced source bodies for reason-based, on-demand selection
 - Injects `prd.md`, `design.md` if present, and `implement.md` if present
 
 [/Kiro]
