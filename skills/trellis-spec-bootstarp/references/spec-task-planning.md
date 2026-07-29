@@ -14,7 +14,7 @@ Avoid artificial decomposition. A small library usually needs one focused spec p
 
 ## Task Shape
 
-When a Trellis task is useful, write a concise PRD with these sections:
+When a Trellis task is useful, write a concise PRD with only these fixed sections. Put architecture, source evidence, file lists, and execution steps in `design.md`, `research/`, or `implement.md` instead:
 
 ```markdown
 # Fill <package-or-layer> Trellis Specs
@@ -22,30 +22,15 @@ When a Trellis task is useful, write a concise PRD with these sections:
 ## Goal
 Write project-specific `.trellis/spec/` guidance for <scope>.
 
-## Scope
-- Spec directory:
-- Source directories to inspect:
-- Tests to inspect:
-- Out of scope:
+## Requirements
+- Capture the project-specific guidance contributors need.
+- Keep the scope focused on this package or layer.
 
-## Architecture Context
-Summarize the concrete findings from repository analysis.
-
-## Files To Create Or Update
-- `.trellis/spec/.../index.md`
-- `.trellis/spec/.../<topic>.md`
-
-## Rules
-- Adapt the spec file set to the real codebase.
-- Use real source examples with file paths.
-- Remove template-only sections that do not apply.
-- Do not modify product source code unless the task explicitly asks for it.
-
-## Acceptance Criteria
+## User-visible Outcomes
 - [ ] Specs contain concrete examples and anti-patterns from the repository.
 - [ ] No placeholder text remains.
 - [ ] Index files match the final spec files.
-- [ ] Claims are backed by source files, tests, or project docs.
+- [ ] Contributors can find and use the resulting guidance.
 ```
 
 ## Optional Helper Agents

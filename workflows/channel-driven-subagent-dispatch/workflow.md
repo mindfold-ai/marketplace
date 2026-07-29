@@ -82,7 +82,7 @@ Phase 3: Finish  -> verify, update spec, commit, and wrap up
 
 ### Planning Artifacts
 
-- `prd.md` — requirements, constraints, and acceptance criteria.
+- `prd.md` — a human-readable contract with fixed, ordered `Goal`, `Requirements`, and `User-visible Outcomes` sections. Goals use an ordered list and outcomes use verifiable checklist items. Do not put technical design or execution checklists here.
 - `design.md` — technical design for complex tasks.
 - `implement.md` — execution plan, validation commands, review gates, and rollback points for complex tasks.
 - `implement.jsonl` / `check.jsonl` — worker context manifests. Put spec and research files here, not code files.
@@ -211,7 +211,7 @@ Requirements:
 - Prefer researching over asking for information that can be discovered.
 - Update task artifacts immediately when requirements change.
 - Split broad work into parent task + child tasks.
-- Keep `prd.md` focused on requirements and acceptance criteria, not implementation checklists.
+- Keep `prd.md` focused on Goal, Requirements, and User-visible Outcomes, not technical design or implementation checklists.
 
 #### 1.2 Research `[optional · repeatable]`
 
@@ -397,3 +397,13 @@ Add:
 ```
 
 A lifecycle hook or script must write `task.json.status` to that value, otherwise the block is never read.
+
+<!-- prd-contract:START -->
+## PRD Contract
+
+Final `prd.md` sections are `Goal`, `Requirements`, and `User-visible Outcomes` in that order. Goals are ordered lists and user-visible outcomes are checklists. Technical design (technical requirements, algorithms, data contracts, compatibility, rollout, rollback) belongs in `design.md`; ordered execution (ordered checklist, commands, test execution) belongs in `implement.md`; source diagnosis (source diagnosis, file:line evidence, investigation facts) belongs in `research/`.
+
+For UI work, include the prototype in User-visible Outcomes and report `prototype status: pending_user_approval` until the user explicitly approves it; do not run `task.py start` while pending.
+
+Use Mermaid only when it improves understanding. A critical path needs explicit labels, `classDef critical`, `class ... critical`, and red `linkStyle` (`stroke:#dc2626`); never rely on colour alone.
+<!-- prd-contract:END -->
