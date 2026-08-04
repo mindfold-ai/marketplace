@@ -82,7 +82,7 @@ Phase 3: Finish  -> verify, update spec, commit, and wrap up
 
 ### Planning Artifacts
 
-- `prd.md` — a human-readable contract with fixed, ordered `Goal`, `Requirements`, and `User-visible Outcomes` sections.
+- `prd.md` — a human-readable contract with fixed, ordered `Goal`, `Requirements`, and `User-visible Outcomes` sections. Goals use an ordered list and outcomes use verifiable checklist items. Do not put technical design or execution checklists here.
 - `design.md` — technical design for complex tasks.
 - `implement.md` — execution plan, validation commands, review gates, and rollback points for complex tasks.
 - `implement.jsonl` / `check.jsonl` — worker context manifests. Put spec and research files here, not code files.
@@ -211,7 +211,7 @@ Requirements:
 - Prefer researching over asking for information that can be discovered.
 - Update task artifacts immediately when requirements change.
 - Split broad work into parent task + child tasks.
-- Keep `prd.md` focused on requirements and acceptance criteria, not implementation checklists.
+- Keep `prd.md` focused on Goal, Requirements, and User-visible Outcomes, not technical design or implementation checklists.
 
 #### 1.2 Research `[optional · repeatable]`
 
@@ -401,13 +401,9 @@ A lifecycle hook or script must write `task.json.status` to that value, otherwis
 <!-- prd-contract:START -->
 ## PRD Contract
 
-Final `prd.md` sections are `Goal`, `Requirements`, and `User-visible Outcomes` in that order. Goals are ordered lists; Requirements use actual change-type groups with `R1/R1.1` IDs; User-visible Outcomes use `O1` checklists mapped to requirement IDs. Technical design (technical requirements, algorithms, data contracts, compatibility, rollout, rollback) belongs in `design.md`; ordered execution (ordered checklist, commands, test execution) belongs in `implement.md`; source diagnosis (source diagnosis, file:line evidence, investigation facts) belongs in `research/`.
+Final `prd.md` sections are `Goal`, `Requirements`, and `User-visible Outcomes` in that order. Goals are ordered lists and user-visible outcomes are checklists. Technical design (technical requirements, algorithms, data contracts, compatibility, rollout, rollback) belongs in `design.md`; ordered execution (ordered checklist, commands, test execution) belongs in `implement.md`; source diagnosis (source diagnosis, file:line evidence, investigation facts) belongs in `research/`.
 
-Use `task.py set-planning-profile <task> ...` to answer all seven profile questions at once: all `false` derives `lightweight`, any `true` derives `complex`, and unresolved answers derive `pending` and block `start`. Complex tasks require `design.md` and `implement.md`.
+For UI work, include the prototype in User-visible Outcomes and report `prototype status: pending_user_approval` until the user explicitly approves it; do not run `task.py start` while pending.
 
-UI work uses `--meta ui=true` and the standard `prototype/manifest.json`; User-visible Outcomes must show the prototype entry, preview, status, and digest. Inspect current state with `task.py prototype-status <task>`, then record approval and synchronize the PRD with `task.py approve-prototype <task> <approval-evidence>`; `task.py start` is a hard gate.
-
-Diagrams are normally optional. When `interaction_change=true`, put one in User-visible Outcomes and identify the changed flow with Add/Change/Remove text, `classDef changed`, and red `linkStyle` (`stroke:#dc2626`).
-
-When `data_model_change=true`, `design.md` must include the data model, executable `DDL`, table and every-field comments, constraints, migration, and rollback; an `ER` diagram is optional.
+Use Mermaid only when it improves understanding. A critical path needs explicit labels, `classDef critical`, `class ... critical`, and red `linkStyle` (`stroke:#dc2626`); never rely on colour alone.
 <!-- prd-contract:END -->

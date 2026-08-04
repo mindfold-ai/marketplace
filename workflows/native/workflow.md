@@ -168,7 +168,7 @@ Phase 3: Finish  → verify, update spec, commit, and wrap up
 
 Use a Mermaid diagram only when a dependency or flow is hard to understand in prose. Its important path must use `classDef critical`, a `critical` class on important nodes, red `linkStyle`, and explicit text labels; colour alone is never meaning.
 
-For UI tasks, create the task with `--meta ui=true`. This creates `prototype/manifest.json` beside `research/`; complete its entry and preview under `prototype/`, use `task.py prototype-status <task>` to read the current digest and status, show the latest artifacts to the user, then record the user's explicit approval with `task.py approve-prototype <task> <approval-evidence>`. The final planning summary reports the entry, current digest, and `prototype status: pending_user_approval` or `approved`. `task.py start` verifies the files and content-bound approval before changing task or session state.
+For UI tasks, the PRD User-visible Outcomes must include the prototype and explicit approval. The final planning summary reports `prototype status: pending_user_approval` or `approved`; pending approval blocks `task.py start`.
 
 ### Parent / Child Task Trees
 
@@ -430,8 +430,6 @@ Delete the seed `_example` line once real entries exist (optional — it's skipp
 
 Ready gate: both `implement.jsonl` and `check.jsonl` must contain at least one real `{"file": "...", "reason": "..."}` entry before `task.py start`. The seed `_example` row alone is not ready.
 
-Runtime consumers tolerate missing or seed-only manifests for compatibility, but that tolerance is not a planning-ready state.
-
 Skip this step only when both files already have real curated entries.
 
 [/Claude Code, Cursor, OpenCode, codex-sub-agent, Kiro, Gemini, Qoder, CodeBuddy, Copilot, Droid, Pi, Oh My Pi, ZCode, Snow, Reasonix, Trae, Grok, Kimi Code]
@@ -450,7 +448,7 @@ After artifact review, flip the task status to `in_progress`:
 python3 ./.trellis/scripts/task.py start <task-dir>
 ```
 
-Run `task.py set-planning-profile` with all seven answers before start. All `false` derives `lightweight`, where `prd.md` can be enough; any `true` derives `complex`, where `prd.md`, `design.md`, and `implement.md` must exist and be reviewed. Any unresolved answer derives `pending` and blocks start. On sub-agent-dispatch platforms, `implement.jsonl` and `check.jsonl` must both have real curated entries before start.
+For lightweight tasks, `prd.md` can be enough. For complex tasks, `prd.md`, `design.md`, and `implement.md` must exist and be reviewed before start. On sub-agent-dispatch platforms, `implement.jsonl` and `check.jsonl` must both have real curated entries before start. Runtime consumers tolerate missing or seed-only manifests for compatibility, but that tolerance is not a planning-ready state.
 
 After this command succeeds, the breadcrumb auto-switches to `[workflow-state:in_progress]`, and the rest of Phase 2 / 3 follows.
 
@@ -720,13 +718,9 @@ For the workflow state machine's runtime contract, the locations of all status w
 <!-- prd-contract:START -->
 ## PRD Contract
 
-Final `prd.md` sections are `Goal`, `Requirements`, and `User-visible Outcomes` in that order. Goals are ordered lists; Requirements use actual change-type groups with `R1/R1.1` IDs; User-visible Outcomes use `O1` checklists mapped to requirement IDs. Technical design (technical requirements, algorithms, data contracts, compatibility, rollout, rollback) belongs in `design.md`; ordered execution (ordered checklist, commands, test execution) belongs in `implement.md`; source diagnosis (source diagnosis, file:line evidence, investigation facts) belongs in `research/`.
+Final `prd.md` sections are `Goal`, `Requirements`, and `User-visible Outcomes` in that order. Goals are ordered lists and user-visible outcomes are checklists. Technical design (technical requirements, algorithms, data contracts, compatibility, rollout, rollback) belongs in `design.md`; ordered execution (ordered checklist, commands, test execution) belongs in `implement.md`; source diagnosis (source diagnosis, file:line evidence, investigation facts) belongs in `research/`.
 
-Use `task.py set-planning-profile <task> ...` to answer all seven profile questions at once: all `false` derives `lightweight`, any `true` derives `complex`, and unresolved answers derive `pending` and block `start`. Complex tasks require `design.md` and `implement.md`.
+For UI work, include the prototype in User-visible Outcomes and report `prototype status: pending_user_approval` until the user explicitly approves it; do not run `task.py start` while pending.
 
-UI work uses `--meta ui=true` and the standard `prototype/manifest.json`; User-visible Outcomes must show the prototype entry, preview, status, and digest. Inspect current state with `task.py prototype-status <task>`, then record approval and synchronize the PRD with `task.py approve-prototype <task> <approval-evidence>`; `task.py start` is a hard gate.
-
-Diagrams are normally optional. When `interaction_change=true`, put one in User-visible Outcomes and identify the changed flow with Add/Change/Remove text, `classDef changed`, and red `linkStyle` (`stroke:#dc2626`).
-
-When `data_model_change=true`, `design.md` must include the data model, executable `DDL`, table and every-field comments, constraints, migration, and rollback; an `ER` diagram is optional.
+Use Mermaid only when it improves understanding. A critical path needs explicit labels, `classDef critical`, `class ... critical`, and red `linkStyle` (`stroke:#dc2626`); never rely on colour alone.
 <!-- prd-contract:END -->
