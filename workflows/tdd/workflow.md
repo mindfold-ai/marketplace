@@ -157,7 +157,7 @@ Phase 3: Finish  → verify, update spec, commit, and wrap up
 
 ### Planning Artifacts
 
-- `prd.md` — requirements, constraints, and acceptance criteria. Do not put technical design or execution checklists here.
+- `prd.md` — a human-readable contract with fixed, ordered `Goal`, `Requirements`, and `User-visible Outcomes` sections. Goals use an ordered list and outcomes use verifiable checklist items. Do not put technical design or execution checklists here.
 - `design.md` — technical design for complex tasks: boundaries, contracts, data flow, tradeoffs, compatibility, rollout / rollback shape.
 - `implement.md` — execution plan for complex tasks: ordered checklist, validation commands, review gates, rollback points.
 - `implement.jsonl` / `check.jsonl` — spec and research manifests for sub-agent context. They do not replace `implement.md`.
@@ -338,7 +338,7 @@ The brainstorm skill will guide you to:
 - Prefer offering options over open-ended questions
 - Update `prd.md` immediately after each user answer
 - Split large scopes into a parent task plus child tasks when the deliverables can be verified independently
-- Keep `prd.md` focused on requirements and acceptance criteria
+- Keep `prd.md` focused on Goal, Requirements, and User-visible Outcomes
 - Capture behavior slices: public interface, input/action, expected outcome, and boundary to mock or avoid mocking
 - For complex tasks, produce `design.md` and `implement.md` before implementation starts
 
@@ -733,3 +733,13 @@ For the workflow state machine's runtime contract, the locations of all status w
 
 - `.trellis/spec/cli/backend/workflow-state-contract.md` — runtime contract + writer table + test invariants
 - `.trellis/scripts/inject-workflow-state.py` — actual parser (reads workflow.md only, no embedded text)
+
+<!-- prd-contract:START -->
+## PRD Contract
+
+Final `prd.md` sections are `Goal`, `Requirements`, and `User-visible Outcomes` in that order. Goals are ordered lists and user-visible outcomes are checklists. Technical design (technical requirements, algorithms, data contracts, compatibility, rollout, rollback) belongs in `design.md`; ordered execution (ordered checklist, commands, test execution) belongs in `implement.md`; source diagnosis (source diagnosis, file:line evidence, investigation facts) belongs in `research/`.
+
+For UI work, include the prototype in User-visible Outcomes and report `prototype status: pending_user_approval` until the user explicitly approves it; do not run `task.py start` while pending.
+
+Use Mermaid only when it improves understanding. A critical path needs explicit labels, `classDef critical`, `class ... critical`, and red `linkStyle` (`stroke:#dc2626`); never rely on colour alone.
+<!-- prd-contract:END -->
