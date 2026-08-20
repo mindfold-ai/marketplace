@@ -162,7 +162,7 @@ Task management CLI with 16 subcommands.
 #### Create Task
 
 ```bash
-python3 .trellis/scripts/task.py create "Task name" --slug task-slug
+python3 .trellis/scripts/task.py create "Task name" --description "What this task delivers" --slug task-slug
 ```
 
 **Options:**
@@ -188,6 +188,24 @@ python3 .trellis/scripts/task.py list --status active  # Filter by status
 python3 .trellis/scripts/task.py start <task-dir>   # Set .current-task
 python3 .trellis/scripts/task.py finish              # Clear .current-task
 ```
+
+#### Rename Task
+
+```bash
+python3 .trellis/scripts/task.py rename <task-dir> <new-slug> --dry-run  # Preview
+python3 .trellis/scripts/task.py rename <task-dir> <new-slug>
+```
+
+Rewrites the directory, the `task.json` identity fields, and every
+`parent` / `children` / legacy `subtasks` back-reference in the other active
+tasks, plus context jsonl paths under the task directory. `<new-slug>` is the
+slug body only — the task keeps its original `MM-DD-` creation date.
+
+Mentions of the old name elsewhere under `.trellis/` (journals, session notes,
+workflow prose) are **listed but never rewritten**; edit those by hand. Renaming
+onto an existing or archived name is refused, and the directory moves last, so
+an interrupted rename leaves the task under its old name and re-running the
+identical command finishes it.
 
 #### Initialize Context
 
@@ -220,7 +238,7 @@ python3 .trellis/scripts/task.py set-scope <task-dir> <scope>
 #### Subtask Management
 
 ```bash
-python3 .trellis/scripts/task.py create "Subtask" --parent <parent-dir>
+python3 .trellis/scripts/task.py create "Subtask" --description "What this subtask delivers" --parent <parent-dir>
 python3 .trellis/scripts/task.py add-subtask <parent-dir> <child-dir>
 python3 .trellis/scripts/task.py remove-subtask <parent-dir> <child-dir>
 ```
@@ -365,7 +383,7 @@ python3 .trellis/scripts/init_developer.py john-doe
 
 ```bash
 # Create task
-python3 .trellis/scripts/task.py create "Add user login" --slug add-login
+python3 .trellis/scripts/task.py create "Add user login" --description "Email + password sign-in" --slug add-login
 
 # Initialize context for fullstack work
 python3 .trellis/scripts/task.py init-context \
@@ -380,7 +398,7 @@ python3 .trellis/scripts/task.py start \
 
 ```bash
 # Create a child task under an existing parent
-python3 .trellis/scripts/task.py create "Login API endpoint" \
+python3 .trellis/scripts/task.py create "Login API endpoint" --description "Login endpoint for the auth service" \
   --slug login-api --parent .trellis/tasks/03-24-add-login
 ```
 

@@ -165,7 +165,7 @@ Tasks can have parent-child relationships for decomposing complex work.
 
 ```bash
 # Option 1: Create with --parent flag
-python3 .trellis/scripts/task.py create "Login API" --parent .trellis/tasks/03-24-add-login
+python3 .trellis/scripts/task.py create "Login API" --description "Login endpoint for the auth service" --parent .trellis/tasks/03-24-add-login
 
 # Option 2: Link existing tasks
 python3 .trellis/scripts/task.py add-subtask <parent-dir> <child-dir>

@@ -38,10 +38,11 @@ Each task has its own directory under `.trellis/tasks/{MM-DD-name}/` with `task.
 Common commands:
 
 ```bash
-python3 ./.trellis/scripts/task.py create "<title>" [--slug <name>] [--parent <dir>]
+python3 ./.trellis/scripts/task.py create "<title>" --description "<one-line summary>" [--slug <name>] [--parent <dir>]
 python3 ./.trellis/scripts/task.py start <name>
 python3 ./.trellis/scripts/task.py current --source
 python3 ./.trellis/scripts/task.py finish
+python3 ./.trellis/scripts/task.py rename <name> <new-slug> [--dry-run]   # rename task + every reference
 python3 ./.trellis/scripts/task.py archive <name>
 python3 ./.trellis/scripts/task.py validate <name>
 ```
@@ -196,8 +197,10 @@ Goal: clarify requirements, get task-creation consent, and produce planning arti
 Create the task directory only after task-creation consent:
 
 ```bash
-python3 ./.trellis/scripts/task.py create "<task title>" --slug <name>
+python3 ./.trellis/scripts/task.py create "<task title>" --description "<one-line summary>" --slug <name>
 ```
+
+The title and `--description` are both required and must be non-empty: `create` refuses a blank one rather than writing a record that pre-archive validation would later reject.
 
 Run only `create` here. Do not also run `start`. `start` switches status to `in_progress`, which moves the breadcrumb into execution.
 

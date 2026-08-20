@@ -1,11 +1,11 @@
 ---
 name: mem-recall
-description: Search and recall past AI conversations across Claude Code, Codex, Grok, Pi and ZCode (OpenCode reader temporarily unavailable) via the `trellis mem` CLI. Use whenever the user asks to remember, find, or look up anything discussed in previous AI sessions — across platforms, projects, or time. Triggers on phrases like "我之前跟 Claude/Codex 讨论过 X", "上次怎么处理 Y", "翻一下历史对话", "我们当时怎么决定 X 的", "为什么我们选了 X 而不是 Y", "find what I said about Z", "what did I discuss last week", "the rationale for choosing X", "find the brainstorm where we picked Z over alternatives". Use even when the user doesn't say "history" or "recall" — any reference to past AI-conversation content should trigger this skill. The tool reads sessions directly from each platform's local storage; nothing is uploaded.
+description: Search and recall past AI conversations across Claude Code, Codex, Grok, OpenCode, Pi and ZCode via the `trellis mem` CLI. Use whenever the user asks to remember, find, or look up anything discussed in previous AI sessions — across platforms, projects, or time. Triggers on phrases like "我之前跟 Claude/Codex 讨论过 X", "上次怎么处理 Y", "翻一下历史对话", "我们当时怎么决定 X 的", "为什么我们选了 X 而不是 Y", "find what I said about Z", "what did I discuss last week", "the rationale for choosing X", "find the brainstorm where we picked Z over alternatives". Use even when the user doesn't say "history" or "recall" — any reference to past AI-conversation content should trigger this skill. The tool reads sessions directly from each platform's local storage; nothing is uploaded.
 ---
 
 # Mem Recall
 
-Cross-platform conversation memory for Claude Code, Codex CLI, Grok, Pi and ZCode. The `trellis mem` command reads each platform's local session storage, cleans the dialogue (strips system prompts, tool noise, hook injections, compact summaries handled correctly), and exposes a focused 5-command CLI for recall workflows. **The OpenCode reader is unavailable** — `--platform opencode` returns empty results and prints a one-shot stderr warning.
+Cross-platform conversation memory for Claude Code, Codex CLI, Grok, OpenCode, Pi and ZCode. The `trellis mem` command reads each platform's local session storage, cleans the dialogue (strips system prompts, tool noise, hook injections, compact summaries handled correctly), and exposes a focused 5-command CLI for recall workflows.
 
 ## Prerequisite
 
@@ -20,9 +20,9 @@ trellis --version
 support and returns turns from before a compaction; earlier versions dropped
 them.
 
-The OpenCode reader is unavailable: it needed a native SQLite dependency that
-failed to install on Windows, and was reverted. `--platform opencode` returns
-empty results and a one-shot stderr warning.
+The OpenCode reader (restored after 0.6.14) reads `opencode.db` with a
+zero-dependency SQLite parser — no native module or install-time build step,
+so the Windows install failure that forced the earlier revert cannot recur.
 
 ## When to use this skill
 
@@ -173,7 +173,7 @@ trellis mem extract 4cda3c7f --phase implement
 | Claude | Native — boundary detection on raw JSONL `tool_use` Bash blocks |
 | Codex | Native — boundary detection on `function_call` (`exec_command`) events |
 | Pi | Native — boundary detection on active-branch session entries |
-| OpenCode | Unavailable — returns empty + warning |
+| OpenCode | Unsupported — `--phase` falls back to full dialogue + warning |
 
 **Edge cases handled gracefully**:
 
@@ -189,7 +189,7 @@ Mostly for browsing/debugging. Project-scoped by default; `--global` to widen.
 trellis mem list --since 2026-04-27
 ```
 
-OpenCode child sessions show `↳ child of <parent-id>` annotation (currently no-op — see OpenCode reader status above).
+OpenCode child sessions show `↳ child of <parent-id>` annotation.
 
 ## Flags reference
 
@@ -222,7 +222,7 @@ The tool reads these locations directly. No daemon, no index, no upload.
 | **Codex** | `~/.codex/sessions/YYYY/MM/DD/rollout-*.jsonl` | One JSONL per session; cwd in `session_meta` payload of first event |
 | **Grok** | `~/.grok/sessions/<url-encoded-cwd>/<session-id>/chat_history.jsonl` | cwd is URL-encoded in the directory name; `session_search.sqlite` is only an index and is not read |
 | **Pi** | Default `~/.pi/agent/sessions/`; env overrides; global `~/.pi/agent/settings.json`; scoped project `.pi/settings.json` | One JSONL per session; relative `sessionDir` values resolve from the settings file directory. Project-local settings are discovered for the current cwd or `--cwd`, not by an unrestricted `--global` scan. Only the active `id`/`parentId` branch is extracted. |
-| **OpenCode** | Reader unavailable | Returns empty + one-shot stderr warning |
+| **OpenCode** | `$XDG_DATA_HOME/opencode/opencode.db` (default `~/.local/share/opencode/`, same rule on Windows); `OPENCODE_DB` overrides | SQLite `session`/`message`/`part` tables read via a zero-dependency snapshot reader; missing db is a silent empty result |
 
 ## Cleaning rules (what's stripped from raw data)
 
@@ -242,9 +242,9 @@ This means search hits are reliable signals of "the actual conversation discusse
 | Claude | Same JSONL — main agent's `Agent`/`Task` tool_use logs the prompt; tool_result has the final output. **Sub-agent's internal turns are NOT recorded** | Only prompt + final result |
 | Codex | **New rollout JSONL per `codex exec` spawn**, no `parent_id` field | Treated as independent session |
 | Pi | Single JSONL per session; abandoned branches dropped from the active branch, but each abandoned branch's `branch_summary` entry is kept as one summary turn | Active branch + abandoned-branch summaries |
-| OpenCode | Reader unavailable | n/a until reader returns |
+| OpenCode | Separate `session` rows linked by `parent_id` | Full child dialogue; `--include-children` merges children into the parent |
 
-`--include-children` only meaningfully changes behavior for OpenCode searches, so it is a no-op while that reader is unavailable.
+`--include-children` only meaningfully changes behavior for OpenCode searches — the other platforms have no recoverable child sessions to merge.
 
 ## Worked example: "what did I discuss about memory in Trellis last week?"
 
