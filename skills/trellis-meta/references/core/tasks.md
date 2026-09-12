@@ -116,20 +116,21 @@ Requirements document for the task.
 # Add User Login
 
 ## Goal
-Implement user authentication with email/password.
+
+1. Let users sign in with email and password.
 
 ## Requirements
 - Login form with email and password fields
 - Form validation
 - API endpoint for authentication
 
-## Acceptance Criteria
+## User-visible Outcomes
+
 - [ ] User can log in with valid credentials
 - [ ] Error shown for invalid credentials
-
-## Technical Notes
-- Use existing auth service pattern
 ```
+
+Put technical notes such as service patterns in `design.md` and implementation steps in `implement.md`.
 
 ---
 
