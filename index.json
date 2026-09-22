@@ -72,6 +72,22 @@
       "description": "Trellis workflow variant where the main session coordinates implement/check workers through trellis channel",
       "path": "workflows/channel-driven-subagent-dispatch/workflow.md",
       "tags": ["workflow", "channel", "sub-agent", "dogfood"]
+    },
+    {
+      "id": "trellis-plan",
+      "type": "command",
+      "name": "Trellis Plan",
+      "description": "Brainstorm then create a Trellis task with prd/design/implement context; validate without writing code or checking git",
+      "path": "commands/trellis-plan.md",
+      "tags": ["trellis", "plan", "brainstorm", "prd"]
+    },
+    {
+      "id": "trellis-execute",
+      "type": "command",
+      "name": "Trellis Execute",
+      "description": "Run implement → check → update-spec → commit → finish workflow for the current task; auto-start if needed; skip unrelated dirty files",
+      "path": "commands/trellis-execute.md",
+      "tags": ["trellis", "execute", "implement", "check", "commit"]
     }
   ]
 }
