@@ -15,13 +15,9 @@
 
 ## Trellis System
 
-### Developer Identity
+### Task Ownership
 
-Initialize your identity on first use:
-
-```bash
-python3 ./.trellis/scripts/init_developer.py <your-name>
-```
+New tasks require a non-empty title and description. This workflow owns task creation, planning artifact paths, and activation.
 
 ### Spec System
 
@@ -38,7 +34,7 @@ Each task has its own directory under `.trellis/tasks/{MM-DD-name}/` with `task.
 Common commands:
 
 ```bash
-python3 ./.trellis/scripts/task.py create "<title>" [--slug <name>] [--parent <dir>]
+python3 ./.trellis/scripts/task.py create "<title>" --description "<summary>" [--slug <name>] [--parent <dir>]
 python3 ./.trellis/scripts/task.py start <name>
 python3 ./.trellis/scripts/task.py current --source
 python3 ./.trellis/scripts/task.py finish
@@ -196,14 +192,14 @@ Goal: clarify requirements, get task-creation consent, and produce planning arti
 Create the task directory only after task-creation consent:
 
 ```bash
-python3 ./.trellis/scripts/task.py create "<task title>" --slug <name>
+python3 ./.trellis/scripts/task.py create "<task title>" --description "<summary>" --slug <name>
 ```
 
 Run only `create` here. Do not also run `start`. `start` switches status to `in_progress`, which moves the breadcrumb into execution.
 
 #### 1.1 Requirement exploration `[required · repeatable]`
 
-Load `trellis-brainstorm` and write user requirements into `prd.md`. Complex tasks also need `design.md` and `implement.md`.
+Load `trellis-brainstorm` with the task's planning artifact paths and write requirements into `prd.md`. This workflow owns task creation, context manifests, review approval, and activation. Complex tasks also need `design.md` and `implement.md`.
 
 Requirements:
 
@@ -370,7 +366,7 @@ Do not amend. Do not push.
 
 #### 3.5 Wrap-up reminder
 
-After committing, remind the user to run `/trellis:finish-work` to archive the task and record the session.
+After committing, remind the user to run `/trellis:finish-work` to archive the completed task.
 
 ---
 
