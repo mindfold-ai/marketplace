@@ -16,6 +16,14 @@ description: "Meta-skill for understanding and customizing Mindfold Trellis — 
 
 > ⚠️ **Version Mismatch Warning**: If your Trellis CLI version differs from above, some features may not work as documented. Run `trellis --version` to check.
 
+### DeepSeek Harness compatibility addendum
+
+DeepSeek Harness is available on the Trellis 0.7 beta line, outside the historical
+platform matrix below. For DSH role skills, optional companion-plugin behavior,
+and legacy versus 0.2.1-alpha.2 synchronization, read
+[DSH synchronization](references/deepseek-harness/synchronization.md).
+Do not apply Claude Code's Task/Agent or hook assumptions to DSH.
+
 ---
 
 ## Platform Compatibility
